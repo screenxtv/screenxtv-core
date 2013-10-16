@@ -7,7 +7,7 @@ socket=TCPSocket.open 'localhost', 8000
 channel = ScreenXTV::Channel.new
 channel.winch do |width, height|
   begin
-  socket.write({type: :winch, width: width, height: height}.to_json+"\n")
+    socket.write({type: :winch, width: width, height: height}.to_json+"\n")
   rescue => e
     p e, *e.backtrace
     throw e
@@ -16,9 +16,9 @@ end
 
 channel.data do |data|
   begin
-  socket.write({type: :data, data: data}.to_json+"\n")
-  print data
-    rescue => e
+    socket.write({type: :data, data: data}.to_json+"\n")
+    print data
+  rescue => e
     p e, *e.backtrace
     throw e
   end

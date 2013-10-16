@@ -62,3 +62,8 @@ net.createServer(function(socket){
     }
   }
 }).listen(TCP_PORT);
+
+
+process.on('uncaughtException',function(err){
+  console.log('Caught exception:',err.stack);
+});
