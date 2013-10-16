@@ -1,0 +1,47 @@
+<script src='/vt100.js'></script>
+<script src='/terminal.js'></script>
+<script src='/socket.io/socket.io.js'></script>
+<script>
+onload=function(){
+  var element=document.getElementById('terminal');
+  var vt100=new VT100(80,24);
+  var terminal=new Terminal(element,vt100.W,vt100.H,Terminal.defaultColorMap.white);
+  terminal.vt100=vt100;
+  window.terminal=terminal;
+
+  function requestUpdate(){
+    if(requestUpdate.timer)return;
+    requestUpdate.timer=setTimeout(function(){
+      terminal.updateView();
+      requestUpdate.timer=null;
+    },50);
+  }
+
+  var socket=io.connect('/');
+  window.socket=socket;
+  socket.on('connect',function(){
+    socket.on('init',function(data){
+      element.style.opacity=1;
+      terminal.vt100=new VT100(data);
+      terminal.resize(data.W,data.H);
+      terminal.updateView();
+    });
+    socket.on('data',function(data){
+      for(var i=0;i<data.length;i++){
+        terminal.vt100.write(data[i]);
+        requestUpdate();
+      }
+    });
+    socket.on('winch',function(data){
+      terminal.resize(data.width,data.height);
+      requestUpdate();
+    });
+    socket.on('exit',function(){
+      element.style.opacity=0.5;
+    });
+  });
+
+}
+</script>
+<body bgcolor='silver'>
+<div id='terminal' style='border:1px solid black;opacity:0.5;'></div>
