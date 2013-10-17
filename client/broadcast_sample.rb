@@ -1,4 +1,4 @@
-require './screenxtv'
+require './screenxtv/screenxtv'
 require 'json'
 require 'socket'
 
@@ -46,6 +46,5 @@ Thread.new do
   end
 end
 
-ScreenXTV::CommandLine.execute_via_screen channel, command: 'zsh', message: 'broadcasting...'
-
-
+command = `which zsh`.empty? ? 'bash' : 'zsh'
+ScreenXTV::CommandLine.execute_via_screen channel, command: command, message: 'broadcasting...'
