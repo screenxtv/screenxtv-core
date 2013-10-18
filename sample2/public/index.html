@@ -1,0 +1,24 @@
+<script>
+var http=new XMLHttpRequest();
+http.open('GET','/list',false);
+http.send();
+var list=JSON.parse(http.responseText);
+onload=function(){
+  var a=document.createElement('a');
+  var s='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  var id='';for(var i=0;i<8;i++)id+=s.charAt(s.length*Math.random());
+  a.href='/shell.html?'+id;
+  a.textContent='new shell';
+  document.body.appendChild(a);
+  for(var i=0;i<list.length;i++){
+    var a=document.createElement('a');
+    a.href='/shell.html?'+list[i];
+    a.textContent='shell:'+list[i];
+    document.body.appendChild(a);
+  }
+}
+</script>
+<style>
+a{display:block;}
+a:first-child{margin-bottom:20px;}
+</style>

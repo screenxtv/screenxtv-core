@@ -1,0 +1,100 @@
+<script src='/vt100.js'></script>
+<script src='/terminal.js'></script>
+<script src='/socket.io/socket.io.js'></script>
+<script>
+onload=function(){
+  var shell=location.search.match(/[a-zA-Z0-9]+/)
+  if(!shell){
+    location.href='/';
+    return;
+  }
+  var element=document.getElementById('terminal');
+  var vt100=new VT100(80,24);
+  var terminal=new Terminal(element,vt100.W,vt100.H,Terminal.defaultColorMap.white);
+  terminal.vt100=vt100;
+  window.terminal=terminal;
+
+  function requestUpdate(){
+    if(requestUpdate.timer)return;
+    requestUpdate.timer=setTimeout(function(){
+      terminal.updateView();
+      requestUpdate.timer=null;
+    },50);
+  }
+
+  var socket=io.connect('/');
+  window.socket=socket;
+  socket.on('connect',function(){
+    socket.emit('shell',shell.toString());
+    socket.on('init',function(data){
+      element.style.opacity=1;
+      terminal.vt100=new VT100(data);
+      terminal.resize(data.W,data.H);
+      terminal.updateView();
+    });
+    socket.on('data',function(data){
+      for(var i=0;i<data.length;i++){
+        terminal.vt100.write(data[i]);
+        requestUpdate();
+      }
+    });
+    socket.on('winch',function(data){
+      terminal.resize(data.width,data.height);
+      requestUpdate();
+    });
+    socket.on('exit',function(){
+      element.style.opacity=0.5;
+    });
+  });
+
+  var W,H;
+  window.onresize=function(){
+    var w=(window.innerWidth-16)/8|0;
+    var h=(window.innerHeight-16)/16|0;
+    if(w!=W||h!=H){
+      socket.emit('message',{type:'winch',width:w,height:h});
+      W=w;H=h;
+    }
+  }
+  window.onresize();
+  window.onkeydown=function(e){
+    var data;
+    if(e.keyCode==27){
+      data="\x1B";
+    }else if(e.ctrlKey&&e.keyCode!=17){
+      data=String.fromCharCode(e.keyCode%32);
+    }else{
+      switch(e.keyCode){
+        case 8:data=e.altKey?"\x1B\x7f":"\x7f";break;
+        case 9:data=e.altKey?"\x1B\t":"\t";break;
+        case 37:data=e.altKey?"\x1Bb":"\x1B[D";break;
+        case 38:data=e.altKey?"\x1B\x1B[A":"\x1B[A";break;
+        case 39:data=e.altKey?"\x1Bf":"\x1B[C";break;
+        case 40:data=e.altKey?"\x1B\x1B[B":"\x1B[B";break;
+      }
+    }
+    if(!data&&e.altKey&&e.keyCode!=18){
+      data="\x1B"+String.fromCharCode(e.keyCode).toLowerCase();
+      console.log(JSON.stringify(data),e.altKey);
+    }
+    console.log(e.keyCode,e.charCode,data);
+    if(data){
+      console.log(JSON.stringify(data));
+      socket.emit('message',{type:'data',data:data});
+      return false;
+    }
+  }
+  window.onkeypress=function(e){
+    console.log(e.charCode,e.keyCode,e.altKey)
+    if(e.altKey&&e.charCode==18)return false;
+    var data=String.fromCharCode(e.charCode);
+    if(e.altKey)data="\x1B"+String.fromCharCode(e.keyCode);
+    console.log(JSON.stringify(data));
+    socket.emit('message',{type:'data',data:data});
+    return false;
+  }
+
+}
+</script>
+<body bgcolor='silver'>
+<div id='terminal' style='border:1px solid black;opacity:0.5;'></div>
