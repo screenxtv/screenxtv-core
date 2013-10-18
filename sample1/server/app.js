@@ -1,17 +1,23 @@
+var fs=require('fs');
 var net=require('net');
 var http=require('http');
 var express=require('express');
 var socketio=require('socket.io');
-var VT100=require('./lib/vt100');
+var VT100=require('../../lib/vt100/vt100');
 var app=express();
 var HTTP_PORT=8080
 var TCP_PORT=8000
 
+function assets(path){
+  if(!assets[path])assets[path]=fs.readFileSync(path);
+  return assets[path];
+}
+
 app.get('/terminal.js',function(req,res){
-  res.sendfile('./lib/terminal.js');
+  res.end(assets('../../lib/vt100/terminal.js'));
 });
 app.get('/vt100.js',function(req,res){
-  res.sendfile('./lib/vt100.js');
+  res.end(assets('../../lib/vt100/vt100.js'));
 });
 app.use(express.static('./public'));
 
@@ -26,7 +32,7 @@ io.sockets.on('connection',function(socket){
   console.log('connection!');
   if(vt100)socket.emit('init',vt100);
   socket.on('message',function(data){
-    sourceSocket.write(JSON.stringify(data)+'\n');
+    if(sourceSocket)sourceSocket.write(JSON.stringify(data)+'\n');
   });
 })
 
