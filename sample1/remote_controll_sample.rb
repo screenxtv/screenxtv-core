@@ -25,6 +25,7 @@ channel.data do |data|
 end
 
 Thread.new do
+  channel.winch *STDOUT.winsize.reverse
   loop do
     data = JSON.parse socket.gets
     case data['type']

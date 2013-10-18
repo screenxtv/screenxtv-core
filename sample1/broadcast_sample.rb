@@ -46,5 +46,6 @@ Thread.new do
   end
 end
 
+channel.winch *STDOUT.winsize.reverse
 command = `which zsh`.empty? ? 'bash' : 'zsh'
 ScreenXTV::CommandLine.execute_via_screen channel, command: command, message: 'broadcasting...'

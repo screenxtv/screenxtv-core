@@ -10,8 +10,6 @@ module ScreenXTV
           channel.winch_call width, height
         }
 
-        winch.call *STDOUT.winsize.reverse
-
         channel.start_event_thread do |type, *args|
           case type
           when :winch
