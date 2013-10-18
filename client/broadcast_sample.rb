@@ -1,4 +1,4 @@
-require './screenxtv/screenxtv'
+require '../lib/screenxtv/screenxtv'
 require 'json'
 require 'socket'
 
