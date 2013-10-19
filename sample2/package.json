@@ -12,6 +12,6 @@
   "dependencies": {
     "express": "3.0.2",
     "socket.io": "*",
-    "ejs": "*"
+    "pty.js": "*"
   }
 }
