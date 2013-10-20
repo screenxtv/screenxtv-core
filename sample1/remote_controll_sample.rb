@@ -24,18 +24,33 @@ channel.data do |data|
   end
 end
 
+winchanged = false
+Signal.trap :SIGWINCH do
+  winchanged = true
+end
 Thread.new do
-  channel.winch *STDOUT.winsize.reverse
   loop do
-    data = JSON.parse socket.gets
-    case data['type']
-    when 'data'
-      channel.data data['data']
-    when 'winch'
-      channel.winch data['width'],data['height']
+    if winchanged
+      winchanged = false
+      channel.winch *STDOUT.winsize.reverse
     end
+    sleep 0.1
   end
 end
 
+Thread.new do
+  loop do
+    channel.data STDIN.getch
+  end
+end
+
+Thread.new do
+  loop do
+    data = JSON.parse socket.gets
+    channel.data data['data'] if data['type']=='data'
+  end
+end
+
+channel.winch *STDOUT.winsize.reverse
 command = `which zsh`.empty? ? 'bash' : 'zsh'
 ScreenXTV::CommandLine.execute_via_screen channel, command: command, message: 'broadcasting...'
