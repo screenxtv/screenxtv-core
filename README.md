@@ -2,10 +2,10 @@
 Core part of [ScreenX TV](http://screenx.tv/) and some sample code.
 
 ## /sample1
-broadcast and remote-controll example.
+broadcast and remote-control example.
 
 1. launch server : `cd ./server; node app.js`
-2. run `ruby broadcast_sample.rb` or `ruby remote_controll_sample.rb`
+2. run `ruby broadcast_sample.rb` or `ruby remote_control_sample.rb`
 3. Open http://localhost:8080/
 
 ## /sample2
