@@ -23,7 +23,7 @@ module ScreenXTV
           prevdata = ''
           while(data = rr.readpartial 1024)
             odata, prevdata = utf8_split prevdata + data
-            channel.data_call odata
+            channel.data_call odata.force_encoding 'UTF-8'
           end
         rescue
         end
