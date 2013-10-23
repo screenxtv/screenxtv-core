@@ -1,21 +1,35 @@
-# ScreenXTV-Core
-Core part of [ScreenX TV](http://screenx.tv/) and some sample code.
+# ScreenXTV Core
+
+ScreenX TV Core is a set of opensource self-hosted client/server tools to broadcast your terminal, internally used in [ScreenX TV](http://screenx.tv/).
+
+The tool enables you to not only broadcast (READ), but also control your terminal from web browsers (WRITE).
+
+## Requirements (`command`)
+
+- Nodejs (`node`)
+- Node Package Manager (`npm`)
+- Ruby (`ruby`)
 
 ## /sample1
-broadcast and remote-control example.
 
-1. launch server : `cd ./server; node app.js`
-2. run `ruby broadcast_sample.rb` or `ruby remote_control_sample.rb`
-3. Open http://localhost:8080/
+`/sample1` is a sample to broadcast and remote-control example.
+
+1. Install required packages: `cd ./server/; npm install`
+2. Launch server: `npm start`
+3. Broadcast/Control your terminal: `ruby broadcast_sample.rb` / `ruby remote_control_sample.rb`
+4. Click the URL with your browser: [http://localhost:8080/](http://localhost:8080/)
 
 ## /sample2
-remote-login example.
 
-1. launch server : `node app.js`
-2. open http://localhost:8080/
+`/sample2` is a sample to remotely login your terminal; you can issue the shell process from web browser.
+
+1. Install required packages: `cd ./server/; npm install`
+2. Launch server: `npm start`
+4. Click the URL with your browser: [http://localhost:8080/](http://localhost:8080/)
 
 ## Notice
-If you want to use these codes in your project, you should consider using a proper protocol(instead of raw tcp-socket), authentication, and encryption.
+
+If you want to use these codes in your project, you should consider using a proper protocol (instead of raw tcp-socket), authentication, and encryption for security issues.
 
 ## Related Works
 
@@ -31,7 +45,7 @@ If you want to use these codes in your project, you should consider using a prop
 
 (The MIT License)
 
-Copyright (c) 2013 tomoya ishida
+Copyright (c) 2013 Tomoya Ishida
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
