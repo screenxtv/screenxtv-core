@@ -1,8 +1,10 @@
-# ScreenXTV Core
+# ScreenX TV Core
 
-ScreenX TV Core is a set of opensource self-hosted client/server tools to broadcast your terminal, internally used in [ScreenX TV](http://screenx.tv/).
+![ScreenX TV Core - Broadcasting Scene](https://dl.dropboxusercontent.com/u/2819285/screenxtv-core_ss-broadcast.png)
 
-The tool enables you to not only broadcast (READ), but also control your terminal from web browsers (WRITE).
+ScreenX TV Core is a opensource self-hosted server to broadcast your terminal, internally used in [ScreenX TV](http://screenx.tv/).
+
+With attached sample client tool, you can broadcast your terminal to the server you hosted (See [sample1](https://github.com/screenxtv/screenxtv-core#sample1)). Also, you can control your terminal from web browser (See [sample2](https://github.com/screenxtv/screenxtv-core#sample2)).
 
 ## Requirements (`command`)
 
@@ -21,11 +23,11 @@ The tool enables you to not only broadcast (READ), but also control your termina
 
 ## /sample2
 
-`/sample2` is a sample to remotely login your terminal; you can issue the shell process from web browser.
+`/sample2` is a sample to remotely login your terminal; you can issue the shell process log in it from web browser.
 
 1. Install required packages: `cd ./server/; npm install`
 2. Launch server: `npm start`
-4. Click the URL with your browser: [http://localhost:8080/](http://localhost:8080/)
+3. Click the URL with your browser: [http://localhost:8080/](http://localhost:8080/)
 
 ## Notice
 
