@@ -53,4 +53,9 @@ end
 
 channel.winch *STDOUT.winsize.reverse
 command = `which zsh`.empty? ? 'bash' : 'zsh'
-ScreenXTV::CommandLine.execute_via_screen channel, command: command, message: 'broadcasting...'
+if `which screen`.empty?
+  print "started!\r\n"
+  ScreenXTV::CommandLine.execute_command channel, command
+else
+  ScreenXTV::CommandLine.execute_via_screen channel, command: command, message: '"remote control sample"'
+end
